@@ -4,6 +4,7 @@ import Header from './Componentes/Header';
 import NavBar from './Componentes/NavBar';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
+import 'jspdf-autotable';
 import * as XLSX from 'xlsx'; 
 import { IoPersonCircleOutline } from "react-icons/io5";
 
@@ -25,21 +26,24 @@ function App() {
   };
 
   {/* Função para exportar o pdf do conteúdo selecionada pelo id */}
-  const handleExportToPDF = (str) => {
+  const handleExportCv = (str) => {
     const element = document.getElementById(str);
 
-    if (str === 'conteudo') {
+    // Exportar o conteúdo padrão como imagem
+    html2canvas(element).then((canvas) => {
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, 180, 267);
+      pdf.save('exported-content.pdf');
+    });
+  }
+
+  const handleExportTable = (str) => {
+      const element = document.getElementById(str);
+      // Exportar a tabela como PDF
       const pdf = new jsPDF('p', 'mm', 'a4');
       pdf.autoTable({ html: element });
       pdf.save('exported-content.pdf');
-    } else {
-      html2canvas(element).then((canvas) => {
-        const pdf = new jsPDF('p', 'mm', 'a4');
-        pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, 180, 267);
-        pdf.save('exported-content.pdf');
-      });
-    }
-  };
+  }
 
   {/* Função para exportar o excel do conteúdo selecionada pelo id */}
   const handleExportToExcel = () => {
@@ -131,7 +135,7 @@ function App() {
             
             <div className='flex flex-col gap-3 absolute right-[22%]'>
               <button className='border-2 rounded-sm p-2 w-[160%] bg-white hover:text-blue-500' onClick={handlePrint}>Imprimir</button>
-              <button className='border-2 rounded-sm p-2 w-[160%] bg-white hover:text-blue-500' onClick={()=>handleExportToPDF('conteudo')}>PDF</button>
+              <button className='border-2 rounded-sm p-2 w-[160%] bg-white hover:text-blue-500' onClick={()=>handleExportCv('conteudo')}>PDF</button>
             </div>
           </div>
 
@@ -139,7 +143,7 @@ function App() {
           <div className='flex flex-col justify-center items-center space-y-6 w-[100%] p-[4%]'>
             <div className='space-x-3 self-end w-[50%]'>
               <button className='border-2 rounded-sm p-2 w-[20%] bg-white hover:text-blue-500' onClick={handleExportToExcel}>Excel</button>
-              <button className='border-2 rounded-sm p-2 w-[20%] bg-white hover:text-blue-500' onClick={()=>handleExportToPDF('conteudo2')}>PDF</button>
+              <button className='border-2 rounded-sm p-2 w-[20%] bg-white hover:text-blue-500' onClick={()=>handleExportTable('conteudo2')}>PDF</button>
             </div>
             <table className='w-[75%] bg-white border-collapse mt-20' id='conteudo2'>
               <thead>
