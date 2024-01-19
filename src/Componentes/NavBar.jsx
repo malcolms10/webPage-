@@ -9,7 +9,7 @@ export default function NavBar() {
     return(
         <>
             <div className='w-[15%] border-gray-200 border-2 border-t-0'>
-                <div className=''>
+                <div className='p-2'>
                     <ul className='flex-col items-center justify-between p-2 space-y-2'>
                         <li className='flex items-center gap-3'><MdDashboard /> Dashboard</li>
                         <li className='flex items-center gap-3'><IoMdCart /> Orders</li>
